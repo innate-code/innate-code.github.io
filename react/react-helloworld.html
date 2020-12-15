@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>innate-code</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="http://bootstraptaste.com" />
+<!-- css -->
+<link href="../css/bootstrap.min.css" rel="stylesheet" />
+<link href="../css/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="../css/jcarousel.css" rel="stylesheet" />
+<link href="../css/flexslider.css" rel="stylesheet" />
+<link href="../css/style.css" rel="stylesheet" />
+
+
+<!-- Theme skin -->
+<link href="../skins/default.css" rel="stylesheet" />
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div id="wrapper">
+	<!-- start header -->
+	<header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../index.html"><span>innate</span> code</a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li><a href="../index.html">Главная</a></li>
+                        <li><a href="../allcourses.html">Все курсы</a></li>
+                        <li class="active"><a href="../react/react.html">React</a></li>
+                        <li><a href="../blog.html">Блог</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</header>
+	<!-- end header -->
+	<section id="inner-headline">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="breadcrumb">
+					<li><a href="../index.html"><i class="fa fa-home"></i></a><i class="icon-angle-right"></i></li>
+					<li><a href="../allcourses.html">Все курсы</a></li>
+					<li><a href="../react/react.html">React</a></li>
+					<li><a href="../react/react-helloworld.html">1. Hello World</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section id="content">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<article>
+						<div class="post-image">
+							<div class="post-heading">
+								<h3>Установка</h3>
+							</div>
+						</div>
+						<p class="black">Для начала нужно получить копию библиотеки React. К счастью, сделать это проще простого.
+						<br>
+						<br>
+						Перейдите по адресу <a href="http://reactjs.com">http://reactjs.com</a> (оттуда вас перенаправят на официальную страницу GitHub), нажмите кнопку Download (Загрузить), потом кнопку Download Starter Kit (Загрузить начальный инструментарий) — и получите копию ZIP-файла. Распакуйте и скопируйте каталог, содержащийся в загрузке, в то место, где вы его легко сможете найти.</p>
+						<p class="black">Например:<br>
+						<code>
+						mkdir ~/reactbook<br>
+						mv ~/Downloads/react-0.14.7/ ~/reactbook/react<br>
+						</code>	
+						Единственный файл, который вам понадобится для начала, — это<span class="blue"> ~/reactbook/react/build/react.js</span>. Остальные файлы будут рассмотрены чуть позже.
+						Следует отметить, что React не навязывает какую-либо структуру каталогов, вы можете свободно переместить файлы в другой каталог или переименовать <span class="blue">react.js</span>, как вам захочется.
+						<h3>Привет, мир React</h3>
+						</p>
+						<p class="black">Начнем с простой страницы в вашем рабочем каталоге (<span class="blue">~/reactbook/01.01.hello.html</span>):
+						<pre class="black">
+					    <  !DOCTYPE html> >
+						< html >
+							< head >
+								< title > Hello React < /title >
+								< meta charset = "utf-8" >
+							< head >
+						< body >
+							< div id = "app" >
+								! -- здесь будет отображено мое приложение --
+							< div >
+						< script src = "react/build/react.js"< /script >
+						< script src = "react/build/react-dom.js"< /script >
+						< script >
+							// код моего приложения
+						< /script >
+						< /body >
+						< /html >
+						</pre>
+						</p>
+						<br>
+						<p class="black">
+							В этом файле заслуживают внимание только две особенности:<br>
+							<li class="black">включение библиотеки React и ее DOM-дополнения (с помощью тегов <span class="blue">script src</span>)</li>
+							<li class="black">определение места, где должно находиться ваше приложение на странице (<span class="blue">div id="app"</span>).</li>
+						</p>
+						<blockquote class="gray">С React-приложением всегда можно смешивать обычное HTML-наполнение, а также другие библиотеки JavaScript. На одной и той же странице также могут находиться сразу несколько React-приложений. Вам понадобится лишь место в объектной модели документов (DOM), на которое можно нацелить библиотеку React и сказать ей: «Твори здесь свое волшебство».</blockquote>
+						<p class="black">Теперь добавим код, который говорит <span class="blue">hello</span>. Для этого обновим содержимое файла <span class="blue">01.01.hello.html</span>, заменив строку <span class="blue">// код моего приложения</span> следующими строками:</p>
+						<pre class="black">
+						ReactDOM.render(
+							React.DOM.h1(null, "Hello World!"),
+							document.getElementById("app")
+						);
+						</pre>
+						<p class="black">Загрузите <span class="blue">01.01.hello.html</span> в браузер — и увидите свое новое приложение в действии</p>
+						<p class="black">Поздравляю, вы только что создали свое первое React-приложение!</p>
+						<p class="black">В инструменте разработчика браузера Chrome: можно увидеть, что содержимое контейнера <span class="blue">div id="app"</span> заменено содержимым, созданным вашим React-приложением.</p>
+						<h3>Так что же сейчаспроизошло?</h3>
+						<p class="black">В коде, заставившем работать ваше первое приложение, есть несколько любопытных мест.</p>
+						<p class="black">В первую очередь в нем видно использование React-объекта. Через него происходит обращение ко всем доступным вам API-интерфейсам. API-интерфейс намеренно сделан минимальным, чтобы не пришлось запоминать слишком много имен методов.</p>
+						<p class="black">Можно также посмотреть на ReactDOM-объект. В нем всего лишь горстка методов, наиболее полезным из которых является <span class="blue">render()</span>. Ранее эти методы были составной частью React-объекта, но начиная с версии 0.14 они выделены в самостоятельный объект, чтобы подчеркнуть тот факт, что отображение приложения является отдельной задачей. React-приложение можно создать для отображения в различных средах, например в HTML (в DOM-модели браузера), на холсте (canvas) или прямо в Android либо iOS.</p>
+						<p class="black">Затем следует обратить внимание на концепцию компонентов. Ваш пользовательский интерфейс создается с использованием компонентов, которые сочетаются в любом (подходящем для вас) виде. В своем приложении вы, конечно же, займетесь созданием собственных привычных компонентов, но для начала React предоставляет вам надстройки над HTML DOM-элементами. Эти надстройки используются посредством React.DOM-объекта. В нашем первом примере показано использование компонента <span class="blue">h1</span>. Он соответствует HTML-элементу <span class="blue">< h1 ></span> и доступен по вызову <span class="blue">React.DOM.h1()</span>.</p>
+						<p class="black">И наконец, вы можете заметить хорошо известный DOM-доступ к контейнеру, осуществляемый с помощью метода <span class="blue">document.getElementById("app")</span>. Он используется, чтобы подсказать React, где именно на странице должно размещаться приложение. Это своеобразный мост, переброшенный между манипуляцией с известными вам DOM-объектами и React-территорией.</p>
+						<blockquote class="gray">После переброски моста от DOM к React можно больше не беспокоиться о работе с DOM, поскольку React выполняет трансформацию своих компонентов в базовую платформу (DOM-модель браузера, холст, исходное приложение). Вам не нужно заниматься DOM-моделью, но это не означает, что вы не можете этого делать. React предоставляет вам «резервные переходы», если возникнет необходимость вернуться к истокам DOM-модели.</blockquote>
+						<p class="black">После выяснения роли каждой строки посмотрим на всю картину в целом. Получается следующее: вы отображаете один React-компонент в выбранном вами месте DOM-модели. Всегда отображается только один компонент верхнего уровня, и он может иметь любое необходимое вам количество дочерних (а также внучатых и т. д.) компонентов. Фактически даже в этом простом примере у компонента <span class="blue">h1</span> имеется дочерний компонент — текст <span class="blue">«Hello World!»</span>.</p>
+						<h3>React.DOM.*</h3>
+						<p class="black">Как уже известно, React.DOM-объект предоставляет возможность использования нескольких элементов HTML. Изучим этот API-интерфейс.</p>
+						<blockquote class="gray">Обратите внимание на разницу между React.DOM и ReactDOM. Первое выражение относится к числу готовых к использованию HTML-элементов, а второе является способом отображения приложения в браузере (подумайте о вызове метода ReactDOM.render()).</blockquote>
+						<p class="black">Посмотрим на параметры, получаемые всеми методами React.DOM.*. Вспомним, что приложение Hello World выглядело следующим образом:</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.DOM.h1(null, "Hello World!"),
+								document.getElementById("app"
+							);
+						</pre>
+						<p class="black">Первый параметр для <span class="blue">h1()</span> (который в данном случае имеет значение <span class="blue">null</span>) является объектом, указывающим на любые свойства (подумайте об атрибутах DOM-модели), которые желательно было бы передать вашему компоненту. Например, можно сделать следующее:</p>
+						<p class="black">Второй параметр (в данном примере <span class="blue">"Hello World!"</span>) определяет дочерний элемент компонента. Как видно из предыдущего кода, в самом простом варианте это всего лишь текстовый дочерний элемент (в DOM-терминологии — text-узел). Но у вас может быть сколько угодно вложенных дочерних элементов, передаваемых в качестве дополнительных параметров функции.</p>
+						<p class="black">Например:</p>
+						<pre class="black">
+							React.DOM.h1(
+								{id: "my-heading"},
+								React.DOM.span(null,
+									React.DOM.em(null, "Hell"),
+									"o"
+								),
+								" world!"
+							),
+						</pre>
+						<h3>Специальные DOM-атрибуты</h3>
+						<p class="black">Вам должны быть известны специальные DOM-атрибуты, например <span class="blue">class</span>, <span class="blue">for</span> и <span class="blue">style</span>.</p>
+						<p class="black">Вы не можете использовать <span class="blue">class</span> и <span class="blue">for</span>, поскольку в <span class="blue">JavaScript</span> они являются зарезервированными словами. Вместо них нужно выбрать названия <span class="blue">className</span> и <span class="blue">htmlFor:</span></p>
+						<pre class="black">
+							// Пример неработоспособного кода
+							React.DOM.h1(
+								{
+									class: "pretty",
+									for: "me",
+								},
+							"Hello World!"
+							);
+							// Пример работоспособного кода
+							React.DOM.h1(
+								{
+									className: "pretty",
+									htmlFor: "me",
+								},
+								"Hello World!"
+							);
+						</pre>
+						<p class="black">Что касается атрибута <span class="blue">style</span>, то вы не можете использовать строку, как это обычно делается в <span class="blue">HTML</span>, вместо этого следует задействовать объект <span class="blue">JavaScript</span>. Отказ от использования строк всегда приветствуется (сокращается риск быть атакованным с применением межсайтовых сценариев (XSS)), поэтому такие изменения будут только поощряться.</p>
+						<pre class="black">
+							// Пример неработоспособного кода
+							React.DOM.h1(
+								{
+									style: "background: black; color: white; font-family:
+										Verdana",
+								},
+								"Hello World!"
+							);
+
+							// Пример работоспособного кода
+							React.DOM.h1(
+								{
+								style: {
+									background: "black",
+									color: "white",
+									fontFamily: "Verdana",
+									}
+								},
+								"Hello World!"
+							);
+						</pre>
+						<p class="black">Следует также заметить, что при работе со свойствами <span class="blue">CSS</span> необходимо использовать имена API-интерфейсов <span class="blue">JavaScript</span>, например <span class="blue">fontFamily</span>, а не <span class="blue">font-family</span>.</p>
+						<h3>Расширение браузера React DevTools</h3>
+						<p class="black">Если открыть консоль браузера при попытке запуска некоторых примеров из этой главы, вы увидите следующее сообщение: <span class="blue">Download the React DevTools for a better development experience: https://fb.me/react-devtools</span>, повествующее о том, что для повышения эффективности разработки рекомендуется загрузить инструментарий React DevTools с <a href="https://fb.me/react-devtools">сайта React</a>. Если перейти по указанному URL-адресу, можно найти ссылки на установку браузерного расширения, помогающего вести отладку React-приложений</p>
+						<p class="black">Поначалу это может показаться трудным в освоении, но, когда вы доберетесь до главы 4, все станет на свои места.</p>
+						<h3>Далее: настраиваемые компоненты</h3>
+						<p class="black">Итак, вы справились с простейшим приложением <span class="blue">Hello World</span>. Теперь вы обладаете знаниями, позволяющими:</p>
+						<li class="black">установить библиотеку React, произвести ее настройку и воспользоваться ею (фактически все сводится к использованию всего лишь двух тегов <span class="blue">< script ></span>);</li>
+						<li class="black">Вывести React-компонент в выбранное вами место в DOM-модели (например, <span class="blue">ReactDOM.render(reactWhat, domWhere)</span>, где <span class="blue">reactWhat</span> — выводимый React-компонент, а <span class="blue">domWhere</span> — узел DOM-модели, в который он выводится);</li>
+						<li class="black">использовать встроенные компоненты, являющиеся оболочками для обычных DOM-элементов (например, <span class="blue">React.DOM.div(attributes, children)</span>, где <span class="blue">attributes</span> — атрибуты, а <span class="blue">children</span> — дочерние элементы).</li>
+						<p class="black">Но реальная сила <span class="blue">React</span> проявится, как только вы для создания (и обновления!) пользовательского интерфейса вашего приложения начнете использовать настраиваемые компоненты. Рассмотрим это в следующей главе.</p>
+				</article>
+			</div>
+			<div class="col-lg-4">
+				<aside class="right-sidebar">
+				<div class="widget">
+					<h5 class="widgetheading">Категории</h5>
+					<ul class="cat">
+						<li><i class="icon-angle-right"></i><a class="black" href="../react/react-helloworld.html">1. Hello World</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="../react/react-component-life.html">2. Жизнь компонента</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">3. Excel: необычный табличный компонент</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">4. JSX</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">5. Настройки для разработки приложения</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">6. Создание приложения</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">7. Проверка качества кода, соответствия типов, тестирование, повтор</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">6. Flux</a></li>
+					</ul>
+				</div>
+				</aside>
+			</div>
+		</div>
+	</div>
+	</section>
+	<footer>
+	<div id="sub-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="copyright">
+						<p>
+							den.tynenyk@gmail.com<br>
+							<span>&copy; 2020 Все права защищены. На основе шаблона Moderna от </span><a href="http://bootstraptaste.com" target="_blank">Bootstraptaste</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<ul class="social-network">
+						<li><a href="https://github.com/tynenyk" data-placement="top" title="GitHub"><i class="fa fa-github"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</footer>
+</div>
+<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+<!-- javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.fancybox.pack.js"></script>
+<script src="../js/jquery.fancybox-media.js"></script>
+<script src="../js/google-code-prettify/prettify.js"></script>
+<script src="../js/portfolio/jquery.quicksand.js"></script>
+<script src="../js/portfolio/setting.js"></script>
+<script src="../js/jquery.flexslider.js"></script>
+<script src="../js/animate.js"></script>
+<script src="../js/custom.js"></script>
+</body>
+</html>

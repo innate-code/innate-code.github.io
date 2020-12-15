@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>innate-code</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="http://bootstraptaste.com" />
+<!-- css -->
+<link href="../css/bootstrap.min.css" rel="stylesheet" />
+<link href="../css/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="../css/jcarousel.css" rel="stylesheet" />
+<link href="../css/flexslider.css" rel="stylesheet" />
+<link href="../css/style.css" rel="stylesheet" />
+
+
+<!-- Theme skin -->
+<link href="../skins/default.css" rel="stylesheet" />
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div id="wrapper">
+	<!-- start header -->
+	<header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../index.html"><span>innate</span> code</a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li><a href="../index.html">Главная</a></li>
+                        <li><a href="../allcourses.html">Все курсы</a></li>
+                        <li class="active"><a href="../react/react.html">React</a></li>
+                        <li><a href="../blog.html">Блог</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</header>
+	<!-- end header -->
+	<section id="inner-headline">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="breadcrumb">
+					<li><a href="../index.html"><i class="fa fa-home"></i></a><i class="icon-angle-right"></i></li>
+					<li><a href="../allcourses.html">Все курсы</a> React<a href="../react/react.html"></a></li>
+					<li><a href="../react/react-component-life.html">2. Жизнь компонента</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section id="content">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<article>
+					<div class="post-image">
+						<div class="post-heading">
+							<h3>Жизнь компонента</h3>
+							<p class="black">После того как вы узнали о порядке использования готовых DOM-компонентов, пора приступить к изучению способов создания собственных компонентов.</p>	
+						</div>
+						<h3>Самый минимум</h3>
+						<p class="black">API-интерфейс для создания нового компонента имеет следующий вид:</p>
+						<pre class="black">
+							var MyComponent = React.createClass({
+								/* спецификации */
+							});
+						</pre>
+						<p class="black">В качестве «спецификаций» используется объект JavaScript, имеющий один обязательный метод render() и несколько необязательных методов и свойств. Самый простой пример может выглядеть следующим образом:</p>
+						<pre class="black">
+							var Component = React.createClass({
+								render: function() {
+									return React.DOM.span(null, "I'm so custom");
+								}
+							});
+						</pre>
+						<p class="black">Как видите, единственное, что нужно сделать, — это реализовать метод <span class="blue">render()</span>. Он должен возвратить React-компонент, именно поэтому вы видите в фрагменте кода компонент <span class="blue">span</span>; просто текст возвратить нельзя.</p>
+						<p class="black">Использование вашего компонента в приложении похоже на использование DOM-компонентов:</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.createElement(Component),
+								document.getElementById("app")
+							);
+						</pre>
+						<p class="black">Один из способов создания экземпляра вашего компонента — применение метода <span class="blue">React.createElement()</span>. При создании сразу нескольких экземпляров применяется фабрика:</p>
+						<pre class="black">
+							var ComponentFactory = React.createFactory(Component);
+								ReactDOM.render(
+									ComponentFactory(),
+									document.getElementById("app")
+								);
+						</pre>
+						<p class="black">Учтите, что уже известные вам методы семейства React.DOM.* фактически являются всего лишь удобными оболочками вокруг <span class="blue">React.createElement()</span>. Иными словами, этот код также работает с DOM-компонентами:</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.createElement("span", null, "Hello"),
+								document.getElementById("app")
+							);
+						</pre>
+						<p class="black">Как видите, DOM-элементы, в отличие от функций <span class="blue">JavaScript</span>, определяются в виде строк, как и в случае с пользовательскими компонентами.</p>
+						<h3>Свойства</h3>
+						<p class="black">Ваши компоненты получают свойства и в зависимости от их значений по-разному выводятся на экран или ведут себя в приложении. Все свойства доступны через объект <span class="blue">this.props</span>. Рассмотрим пример:</p>
+						<pre class="black">
+							var Component = React.createClass({
+								render: function() {
+									return React.DOM.span(null, "My name is " +
+										this.props.name);
+								}
+							});
+						</pre>
+						<p class="black">Передача свойства при отображении компонента выглядит следующим образом:</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.createElement(Component, {
+									name: "Bob",
+								}),
+								document.getElementById("app")
+							);
+						</pre>
+						<blockquote>Свойство this.props следует считать пригодным только для чтения. Свойства можно с успехом применять для переноса настроек из родительских компонентов в дочерние (и, как будет показано далее, из дочерних компонентов — в родительские). Если вас все же что-то подстегивает назначить свойство с применением this.props, просто воспользуйтесь вместо этого дополнительными переменными или свойствами спецификации объекта вашего компонента (как в образце this.thing в противоположность образцу this.props.thing). На деле в браузерах, отвечающих спецификации ECMAScript5, вам не захочется видоизменять свойство this.props, поскольку:
+						> Object.isFrozen(this.props) === true; // истина</blockquote>
+						<h3>propTypes</h3>
+						<p class="black">Для объявления списка свойств, принимаемых вашим компонентом, и их типов вы можете добавить в свои компоненты свойство propTypes (типы свойств). Рассмотрим пример:</p>
+						<pre class="black">
+							var Component = React.createClass({
+								propTypes: {
+									name: React.PropTypes.string.isRequired,
+							},
+							render: function() {
+								return React.DOM.span(null, "My name is " + this.props.name);
+								}
+							});
+						</pre>
+						<p class="black">Свойство propTypes не обязательно использовать, но оно предоставляет два преимущества:</p>
+						<li class="black">вы заранее объявляете, какие свойства ожидает ваш компонент. Пользователям вашего компонента не придется тщательно изучать исходный (потенциально весьма длинный) код функции render(), чтобы определить, какими свойствами можно воспользоваться для настройки компонента;</li>
+						<li class="black">React проводит проверку значений свойств в ходе выполнения программы, поэтому свою функцию render() можно создавать без лишних опасений (или чрезмерной подозрительности) насчет данных, получаемых вашими компонентами.</li>
+						<p class="black">Рассмотрим проверку в действии. Выражение <span class="blue">name: React.PropTypes.string.isRequired</span> явно просит для свойства name обязательное строковое значение. Если вы забудете передать значение, в консоли появится предупреждение</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.createElement(Component, {
+									// name: "Bob",
+								}),
+								document.getElementById("app")
+							);
+						</pre>
+						<p class="black">Предупреждение также будет получено при предоставлении значения неверного типа, скажем целого числа</p>
+						<pre class="black">
+							React.createElement(Component, {
+								name: 123,
+							})
+						</pre>
+						<p class="black">даст представление обо всех доступных свойствах PropTypes, которыми можно воспользоваться для объявления ваших ожиданий.</p>
+						<blockquote>Объявление propTypes в ваших компонентах не является обязательным (это означает, что здесь можно перечислить лишь некоторые, а не абсолютно все свойства). Можно назвать идею объявления не всех свойств порочной, но имейте в виду, что можете столкнуться с этим при отладке чужого кода.</blockquote>
+						<p class="black"><span class="blue">Значения свойств, используемые по умолчанию.</span>Когда ваши компоненты получают необязательные свойства, следует уделить особое внимание их работоспособности в том случае, когда свойства не объявляются. Это неизбежно приводит к применению защитного шаблона, например:</p><pre class="black">
+							var text = 'text' in this.props ? this.props.text : '';
+						</pre>
+						<p class="black">Избавиться от необходимости написания такого кода (сконцентрировавшись на более важных аспектах программы) можно, реализовав метод <span class="blue">getDefaultProps():</span></p>
+						<pre class="black">
+							var Component = React.createClass({
+								propTypes: {
+									firstName: React.PropTypes.string.isRequired,
+									middleName: React.PropTypes.string,
+									familyName: React.PropTypes.string.isRequired,
+									address: React.PropTypes.string,
+								},
+							getDefaultProps: function() {
+								return {
+									middleName: '',
+									address: 'n/a',
+								};
+							},
+
+								render: function() {/* ... */}
+							});
+						</pre>
+						<p class="black">Как видите, <span class="blue">getDefaultProps()</span> возвращает объект, предоставляя допустимые значения для каждого необязательного свойства (из числа тех, для которых не указывается<span class="blue"> .isRequired</span>).</p>
+						<h3>Состояние</h3>
+						<p class="black">До сих пор примеры были довольно статичными (или «не имеющими состояния»). Они преследовали простую цель: дать вам представление о создании блоков при составлении вашего пользовательского интерфейса. Но истинный блеск React (на фоне усложнения ситуации при работе с традиционной DOM-моделью браузера) проявляется, когда изменяются данные в вашем приложении. В React используется понятие состояния, которое представляет собой данные, используемые вашими компонентами для их самостоятельного отображения на экране. При изменении состояния React перестраивает пользовательский интерфейс без какого-либо вашего участия. Таким образом, после начального создания пользовательского интерфейса (в функции <span class="blue">render()</span>) вам останется лишь обновлять данные, совершенно не заботясь насчет изменений пользовательского интерфейса. По сути, ваш метод <span class="blue">render()</span> уже предоставил план внешнего вида компонента.</p>
+						<blockquote>Обновление пользовательского интерфейса после вызова метода setState() выполняется с использованием механизма выстраивания очереди, который рационально группирует изменения, поэтому непосредственное обновление this.state (чего не следует делать) может привести к непредсказуемому поведению. Считайте, что объект this.state, так же как и this.props, предназначен лишь для чтения — не только потому, что его применение в другом качестве считается неприемлемым, но и потому, что такое применение может привести к неожиданным результатам. Аналогично никогда не вызывайте this.render() самостоятельно, лучше предоставьте такое право библиотеке React, чтобы дать ей возможность сгруппировать изменения, выявить их наименьшее количество и вызвать render() в самый подходящий момент.</blockquote>
+						<p class="black">Точно так же, как свойства доступны путем обращения к объекту <span class="blue">this.props</span>, к состоянию можно обратиться через объект <span class="blue">this.state</span>. Для обновления состояния предназначен метод <span class="blue">this.setState()</span>. При вызове <span class="blue">this.setState()</span> React вызывает ваш метод <span class="blue">render()</span> и обновляет пользовательский интерфейс.</p>
+						<blockquote>React обновляет пользовательский интерфейс при вызове setState(). Это наиболее распространенный вариант, но чуть позже вы увидите, что есть еще и запасной вариант. Предотвратить обновление пользовательского интерфейса можно, вернув false в специальном методе жизненного цикла — shouldComponentUpdate().</blockquote>
+						<h3>Компонент textarea отслеживающий свое состояние</h3>
+						<p class="black">Сосздадим новый компонент - <span class="blue">textarea</span>(текстовая область) сохраняющий
+						количество набранных в нем символов.</p>
+					</div>
+				</article>
+			</div>
+			<div class="col-lg-4">
+				<aside class="right-sidebar">
+				<div class="widget">
+					<h5 class="widgetheading">Категории</h5>
+					<ul class="cat">
+						<li><i class="icon-angle-right"></i><a class="black" href="../react/react-helloworld.html">1. Hello World</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="../react/react-component-life.html">2. Жизнь компонента</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">3. Excel: необычный табличный компонент</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">4. JSX</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">5. Настройки для разработки приложения</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">6. Создание приложения</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">7. Проверка качества кода, соответствия типов, тестирование, повтор</a></li>
+						<li><i class="icon-angle-right"></i><a class="black" href="#">6. Flux</a></li>
+					</ul>
+				</div>
+				</aside>
+			</div>
+		</div>
+	</div>
+	</section>
+	<footer>
+	<div id="sub-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="copyright">
+						<p>
+							den.tynenyk@gmail.com<br>
+							<span>&copy; 2020 Все права защищены. На основе шаблона Moderna от </span><a href="http://bootstraptaste.com" target="_blank">Bootstraptaste</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<ul class="social-network">
+						<li><a href="https://github.com/tynenyk" data-placement="top" title="GitHub"><i class="fa fa-github"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</footer>
+</div>
+<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+<!-- javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.fancybox.pack.js"></script>
+<script src="../js/jquery.fancybox-media.js"></script>
+<script src="../js/google-code-prettify/prettify.js"></script>
+<script src="../js/portfolio/jquery.quicksand.js"></script>
+<script src="../js/portfolio/setting.js"></script>
+<script src="../js/jquery.flexslider.js"></script>
+<script src="../js/animate.js"></script>
+<script src="../js/custom.js"></script>
+</body>
+</html>

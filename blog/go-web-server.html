@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>innate-code</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="http://bootstraptaste.com" />
+<!-- css -->
+<link href="../css/bootstrap.min.css" rel="stylesheet" />
+<link href="../css/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="../css/jcarousel.css" rel="stylesheet" />
+<link href="../css/flexslider.css" rel="stylesheet" />
+<link href="../css/style.css" rel="stylesheet" />
+
+
+<!-- Theme skin -->
+<link href="../skins/default.css" rel="stylesheet" />
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div id="wrapper">
+	<!-- start header -->
+	<header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar">
+                        <span class="icon-bar">
+                        <span class="icon-bar">
+                    </button>
+                    <a class="navbar-brand" href="../index.html"><span>innate code</a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li><a href="../index.html">Главная</a></li>
+                        <li><a href="../allcourses.html">Все курсы</a></li>
+                        <li><a href="../react/react.html">React</a></li>
+                        <li class="active"><a href="../blog.html">Блог</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</header>
+	<!-- end header -->
+	<section id="inner-headline">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="breadcrumb">
+					<li><a href="../index.html"><i class="fa fa-home"></i></a><i class="icon-angle-right"></i></li>
+					<li><a href="../blog.html">Блог</a></li>
+					<li> / <a href="../blog/go-web-server.html">Go Web Server</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section id="content">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<article>
+						<div class="post-image">
+							<div class="post-heading">
+								<h3>Go Web Server</h3>
+							</div>
+						</div>
+						<p class="black">Стандартная библиотека языка Go включает в себя множество полезных и функциональных компонентов «из коробки», которые позволяют легко разрабатывать серверные приложения. В статье мы изучим, как написать веб-сервер на Go. Начнем с базового «Hello World!» и закончим приложением, выполняющим следующие функции:</p>
+						<li class="black">использует Let’s Encrypt для HTTPS;</li>
+						<li class="black">выполняет маршрутизацию запросов к API;</li>
+						<li class="black">реализует промежуточную обработку запросов (middleware);</li>
+						<li class="black">раздаёт статические файлы;</li>
+						<li class="black">корректно завершает свою работу.</li>
+						<h3>Hello World!</h3>
+						<p class="black">HTTP-сервер на Go пишется довольно быстро. Вот пример с одним обработчиком, возвращающим «Hello World!»:</p><br>
+						<pre class="black">
+							package
+							import (
+  								"fmt"
+							  	"net/http"
+  								)
+								func main() {
+									http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+									fmt.Fprintf( w, "Hello World!" )
+									})
+									http.ListenAndServe(":80", nil)
+								}
+						</pre>
+						<p class="black">Если вы запустите приложение и откроете в браузере страницу http://localhost, то увидите текст "Hello World".
+						В дальнейшем мы используем этот код в качестве основы, но сначала нужно понять, как он работает.</p>
+						<h3>Как работает net/http</h3>
+						<p class="black">В прошлом примере использовался пакет net/http, который служит в Go основным средством для разработки HTTP-клиентов и серверов. Чтобы разобраться в коде, следует кратко объяснить три важные концепции: http.Handler, http.ServeMux и http.Server.</p>
+						<h3>HTTP-обработчики</h3>
+						<p class="black">Обработчиком называется то, что принимает запрос и возвращает ответ. В Go обработчики реализуют интерфейс со следующей сигнатурой:</p>
+						<pre class="black">
+							type Handler interface {
+						        ServerHTTP(ResponseWriter, *Request)
+						}
+						</pre>
+						<p class="black">Наш первый пример использует вспомогательную функцию http.HandleFunc, которая оборачивает другую функцию, принимающую http.ResponseWriter и http.Request, в ServerHTTP.</p>
+						<p class="black">Идея представить обработчики единым интерфейсом открывает много возможностей. Позже мы увидим, что промежуточная обработка запросов будет реализована обработчиком, чей метод ServeHTTP выполняет некоторый код, а после вызывает метод ServeHTTP другого обработчика.</p>
+						<p class="black">Таким образом, обработчики формируют ответы на запросы. Но как понять, какой именно обработчик нужно использовать в данный момент?</p>
+						<h3>Маршрутизация запросов</h3>
+						<p class="black">Для выбора обработчика запроса в Go используется HTTP-мультиплексор. В некоторых библиотеках он называется «muxer» или «router», но суть та же. Мультиплексор выбирает обработчик на основе анализа пути запроса.</p>
+						<p class="black">Если вам нужна продвинутая поддержка маршрутизации, следует обратиться к сторонним библиотекам. Достойные альтернативы — gorilla/mux и go-chi/chi — позволяют простым образом реализовать промежуточную обработку, настроить wildcard-маршрутизацию и решить ряд других задач. Однако важнее то, что они совместимы со стандартными HTTP-обработчиками. Таким образом, сохранится простота кода и возможность его безболезненного изменения в будущем.</p>
+						<p class="black">Будьте внимательны при работе со сложными веб-фреймворками. Обычно они используют нестандартные решения, что усложняет интеграцию со стандартными обработчиками. Как правило, комбинации стандартной библиотеки и легковесного маршрутизатора будет достаточно для разработки большинства приложений.</p>
+						<h3>Обработка запросов</h3>
+						<p class="black">Наконец, нам необходимо что-то, способное слушать входящие соединения и перенаправлять каждый запрос соответствующему обработчику. Эту задачу можно возложить на http.Server.</p>
+						<p class="black">Как мы увидим далее, сервер отвечает за всё, что связано с обработкой соединений. В частности, сюда относится работа по протоколу TLS. В нашем примере при вызове http.ListenAndServer используется стандартный HTTP-сервер.</p>
+						<p class="black">Теперь перейдём к более сложным примерам.</p>
+						<h3>Работа с Let’s Encrypt</h3>
+						<p class="black">Начальная версия нашего приложения работает по протоколу HTTP, но при возможности всегда рекомендуется использовать протокол HTTPS. К счастью, в Go это не проблема.</p>
+						<p class="black">Если у вас уже есть сертификат и закрытый ключ, просто используйте ListenAndServeTLS, указав корректные пути к файлам сертификата и ключа:</p>
+						<pre class="black">
+							http.ListenAndServeTLS(":443", "cert.pem", "key.pem", nil)
+						</pre>
+						<p class="black">Но можно сделать лучше.</p>
+						<p class="black">Let’s Encrypt — это удостоверяющий центр, выдающий бесплатные сертификаты с возможностью их автоматического обновления. Для использования этого сервиса в Go-приложениях доступен пакет autocert.</p>
+						<p class="black">Настроить Let’s Encrypt проще всего используя вспомогательный метод autocert.NewListener в связке с http.Serve. Вспомогательный метод получает и обновляет TLS-сертификаты, в то время как HTTP-сервер занимается обработкой запросов:</p>
+						<pre class="black">
+							http.Serve(autocert.NewListener("example.com"), nil)
+						</pre>
+						<p class="black">Если требуется более тонкая настройка, используйте менеджер autocert.Manager. Затем создайте сервер http.Server (до сих пор мы использовали реализацию по умолчанию) и добавьте менеджер в конфигурацию сервера TLSConfig:</p>
+						<pre class="black">
+							m := &autocert.Manager {
+							Cache: autocert.DirCache"golang-autocert"),
+							Prompt:     autocert.AcceptTOS,
+							HostPolicy: autocert.HostWhitelist("example.org", "www.example.org"),
+							}
+							server := &http.Server{
+							    Addr:      ":443",
+							    TLSConfig: m.TLSConfig(),
+							}
+							server.ListenAndServeTLS("", "")
+						</pre>
+						<p class="black">Таким простым способом можно реализовать полную поддержку HTTPS с автоматическим обновлением сертификата.</p>
+						<h3>Установка маршрутов</h3>
+						<p class="black">Маршрутизатор из стандартной библиотеки неплох, но недостаточно функционален. Как правило, в приложениях требуется более сложная логика маршрутизации. Например, настройка вложенных и wildcard-маршрутов или установка шаблонов и параметров путей.</p>
+						<p class="black">В этом случае могут быть полезны пакеты gorilla/mux и go-chi/chi. Ниже описан пример настройки маршрутизации с помощью библиотеки chi.</p>
+						<p class="black">Допустим, у нас есть файл api/v1/api.go, содержащий маршруты для нашего API:</p>
+						<pre class="black">
+							// HelloResponse — это JSON-представление сообщения
+							type HelloResponse struct {
+								Message string `json:"message"`
+							}
+
+							// HelloName возвращает персонализированное JSON-сообщение
+							func HelloName(w http.ResponseWriter, r *http.Request) {
+								name := chi.URLParam(r, "name")
+								response := HelloResponse {
+									Message: fmt.Sprintf("Hello %s!", name),
+								}
+								jsonResponse(w, response, http.StatusOK)
+							}
+
+							// NewRouter возвращает HTTP-обработчик, который является точкой входа в API
+							func NewRouter() http.Handler {
+								r := chi.NewRouter()
+								r.Get("/{name}", HelloName)
+								return r
+							}
+						</pre>
+						<p class="black">В основном файле установим для маршрутов префикс api/v1:</p>
+						<pre class="black">
+							// NewRouter возвращает новый HTTP-обработчик, который является точкой входа в приложение
+							func NewRouter() http.Handler {
+								router := chi.NewRouter()
+							    router.Mount("/api/v1/", v1.NewRouter())
+							    return router
+							}
+							http.Server(autocert.NewListener("example.com"), NewRouter())
+						</pre>
+						<p class="black">Возможность организации маршрутов и применение продвинутых правил маршрутизации упрощает структуризацию и сопровождение крупных приложений.</p>
+						<h3>Реализация middleware</h3>
+						<p class="black">Промежуточная обработка (middleware) представляет собой обёртывание одного HTTP-обработчика другим. Это позволяет реализовать аутентификацию, журналирование, сжатие и другую функциональность.</p>
+						<p class="black">Данный шаблон программирования несложно понять благодаря простоте интерфейса http.Handler. Мы можем написать функцию, которая принимает один обработчик и оборачивает его в другой. Для примера рассмотрим обработчик с аутентификацией пользователей:</p>
+						<pre class="black">
+							func RequireAuthentication(next http.Handler) http.Handler {
+							    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+							        if !isAuthenticated(r) {
+							            http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+							            return
+							        }
+							        // Аутентификация прошла успешно, направляем запрос следующему обработчику
+							        next.ServeHTTP(w, r)
+							    })
+							}
+						</pre>
+						<p class="black">Некоторые сторонние маршрутизаторы наподобие chi предоставляют полезные и готовые функции для промежуточной обработки.</p>
+						<h3>Раздача статических файлов</h3>
+						<p class="black">В стандартную библиотеку Go встроены возможности для раздачи статического контента, такого как изображения, файлы JavaScript и CSS. Они доступны через функцию http.FileServer, которая возвращает обработчик, раздающий файлы из заданного каталога.</p>
+						<p class="black">Простой пример с уже знакомым нам маршрутизатором:</p>
+						<pre class="black">
+							func NewRouter() http.Handler {
+							    router := chi.NewRouter()
+							    r.Get("/{name}", HelloName)
+								// Настройка раздачи статических файлов
+								staticPath, _ := filepath.Abs("../../static/")
+								fs := http.FileServer(http.Dir(staticPath))
+							    router.Handle("/*", fs)
+							    return r
+						</pre>
+						<h3>Корректное завершение работы</h3>
+						<p class="black">Начиная с версии 1.8 в Go есть возможность корректно завершать работу HTTP-сервера вызовом метода Shutdown(). Мы запустим сервер в горутине и будем прослушивать канал для приёма сигнала прерывания (например комбинации CTRL+C). После получения сигнала выделим несколько секунд на корректное завершение работы сервера.</p>
+						<pre class="black">
+							handler := server.NewRouter()
+							srv := &http.Server{
+							    Handler: handler,
+							}
+							go func() {
+									srv.Serve(autocert.NewListener(domains...))
+							}()
+							// Ожидание сигнала
+							c := make(chan os.Signal, 1)
+							signal.Notify(c, os.Interrupt)
+							// Попытка корректного завершения
+							ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+							defer cancel()
+							srv.Shutdown(ctx)
+						</pre>
+						<h3>Заключение</h3>
+						<p class="black">Стандартная библиотека языка Go невероятно функциональна. В доказательство этого были рассмотрены её встроенные возможности и преимущества гибких интерфейсов для быстрой разработки надежных HTTP-серверов.</p>
+						<p class="black">В качестве продолжения рекомендуем посмотреть статью на Cloudflare, чтобы узнать о предварительных шагах перед тем, как разворачивать HTTP-сервер на Go в Интернете.</p>
+						<p class="black">Если вам интересны шаблоны, которые вы можете использовать в собственных приложениях, зайдите в проект http-boilerplate на GitHub. А чтобы увидеть описанные приемы программирования в реальных продуктах, посетите проект Gophish на GitHub.</p>
+						<a href="https://tproger.ru/translations/go-web-server/">Исходник статьи</a><br>
+						<a href="https://github.com/jordan-wright/http-boilerplate">Код на GitHub</a>
+				</article>
+			</div>
+			<div class="col-lg-4">
+				<aside class="right-sidebar">
+				<div class="widget">
+					<h5 class="widgetheading">Категории</h5>
+					<ul class="cat">
+						<li><i class="icon-angle-right"></i><a class="black" href="../blog/go-web-server.html">Go Web Server</a></li>
+					</ul>
+				</div>
+				</aside>
+			</div>
+		</div>
+	</div>
+	</section>
+	<footer>
+	<div id="sub-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="copyright">
+						<p>
+							den.tynenyk@gmail.com<br>
+							<span>&copy; 2020 Все права защищены. На основе шаблона Moderna от <a href="http://bootstraptaste.com" target="_blank">Bootstraptaste</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<ul class="social-network">
+						<li><a href="https://github.com/tynenyk" data-placement="top" title="GitHub"><i class="fa fa-github"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</footer>
+</div>
+<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+<!-- javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../js/jquery.js"></script>
+<script src="../js/jquery.easing.1.3.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery.fancybox.pack.js"></script>
+<script src="../js/jquery.fancybox-media.js"></script>
+<script src="../js/google-code-prettify/prettify.js"></script>
+<script src="../js/portfolio/jquery.quicksand.js"></script>
+<script src="../js/portfolio/setting.js"></script>
+<script src="../js/jquery.flexslider.js"></script>
+<script src="../js/animate.js"></script>
+<script src="../js/custom.js"></script>
+</body>
+</html>
