@@ -195,6 +195,93 @@
 						<h3>Компонент textarea отслеживающий свое состояние</h3>
 						<p class="black">Сосздадим новый компонент - <span class="blue">textarea</span>(текстовая область) сохраняющий
 						количество набранных в нем символов.</p>
+						<p class="black">Вы (как и все другие потребители этого многократно используемого компонента) можете воспользоваться новым компонентом
+						следующим образом:</p>
+						<pre class="black">
+							ReactDOM.render(
+								React.createElement(TextAreaCounter, {
+									text: "Bob",
+								}),		
+								document.getElementById("app")
+							);
+						</pre>
+						<p class="black">Теперь реализуем компонент. Начнем с создания версии «без
+						состояния», не обрабатывающей обновления, поскольку она
+						не слишком отличается от всех предыдущих примеров:</p>
+						<pre class="black">
+							var TextAreaCounter = React.createClass({
+								propTypes: {
+									text: React.PropTypes.string,
+							},
+								getDefaultProps: function() {
+									return {
+								text: '',
+								};
+							},
+
+								render: function() {
+									return React.DOM.div(null, 
+										React.DOM.textarea({
+											defaultValue: this.props.text,
+									}),
+									React.DOM.h3(null, this.props.text.length)
+									);
+								}
+							});
+						</pre>
+						<blockquote>Возможно, вы заметили, что textarea в предыдущем фрагменте
+						кода получает свойство defaultValue, в отличие от привычного
+						вам дочернего элемента text в HTML. Все дело в небольшой
+						разнице между React и традиционным HTML, которая проявляется при работе с формами. Этот вопрос рассматривается
+						в главе 4, и спешу заверить, что различий не так уж и много.
+						Кроме того, вы поймете, что эти различия вполне резонны
+						и призваны упростить вашу жизнь разработчика.</blockquote>
+						<p class="black">Как видите, компонент получает необязательное строковое свойство <span class="blue">text</span> и выводит текстовую область с заданным значением,
+						
+						
+						<p class="black">Следующий шаг заключается в превращении этого лишенного
+						состояния компонента в компонент с поддержкой состояния.
+						Иными словами, получим компонент, обрабатывающий некие
+						данные (состояние) и использующий их для исходного вывода
+						самого себя на экран с последующим самостоятельным обновлением (повторным выводом) при их изменении.</p>
+						<p class="black">Реализуйте в вашем компоненте метод getInitialState() , чтобы
+						быть уверенными, что работа всегда будет вестись с допустимыми данными:</p>
+						<pre class="black">
+							getInitialState: function() {
+								return {
+									text: this.props.text,
+								};
+							},
+						</pre>
+						<p class="black">Данные, обрабатываемые этим компонентом, являются простым
+						текстом в текстовой области, поэтому у состояния есть только
+						одно свойство <span class="blue">text</span> , доступ к которому можно получить через
+						выражение <span class="blue">this.state.text</span> . Изначально (в <span class="blue">getInitialState()</span> ) вы
+						просто копируете свойство <span class="blue">text</span> . Позже при изменении данных
+						(в ходе набора пользователем текста в текстовой области) компонент обновляет свое состояние, используя вспомогательный метод:</p>
+						<pre class="black">
+							_textChange: function(ev) {
+								this.setState({
+									text: ev.target.value,
+								});
+							},
+						</pre>
+						<p class="black">Состояние всегда обновляется с помощью метода <span class="blue">this.setState()</span> , который получает объект и объединяет его с уже существующими в <span class="blue">this.state</span> данными. Нетрудно догадаться, что <span class="blue">_textChange()</span> является отслеживателем событий, который получает объект события ev и извлекает из него текст, введенный в текстовую область.</p>
+						<p class="black">Остается лишь обновить метод <span class="blue">render()</span> для использования вместо <span class="blue">this.props</span> свойства <span class="blue">this.state</span> и установить отслеживатель событий:</p>
+						<pre class="black">
+							render: fucntion() {
+								render React.DOM.div(nill,
+									React.DOM.textarea({
+										valuer: this.state.text,
+										onChange: this._textChange,
+									}),
+									React.DOM.h3(null, this.state.text.length)
+								);
+
+							}
+						</pre>
+						<p class="black">Теперь, как только пользователь что-нибудь набирает в текстовой области, значение счетчика обновляется, чтобы соответствовать содержимому этой области</p>
+						<h3>Немного о DOM-событиях</h3>
 					</div>
 				</article>
 			</div>
